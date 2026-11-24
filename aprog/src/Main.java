@@ -11,10 +11,13 @@ public class Main {
         int numRedesSociais = lerNomes(redesSociais);
 
         lerMatriz(utilizacao, numPessoas, numRedesSociais);
+        uso(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
         System.out.println("c) Daily usage");
         usoDiario(utilizacao, nomes, numPessoas, numRedesSociais);
+        atividade(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
         System.out.println("e) Users consistently above average");
         acimaMediaTodasRedes(utilizacao, nomes, numPessoas, numRedesSociais);
+        rede(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
     }
 
     private static int lerNomes(String[] nomes) {
@@ -70,7 +73,7 @@ public class Main {
         System.out.println("d) Most active Users");
 
         for (int j = 0; j < numRedesSociais; j++) {
-            int maior = maiorTempoRede(utilizacao, j, numPessoas);
+            int maior = maior(utilizacao, j, numPessoas);
             System.out.printf("%-12s : ", redesSociais[j]);
 
             for (int i = 0; i < numPessoas; i++) {
@@ -83,7 +86,7 @@ public class Main {
         System.out.println();
     }
 
-    public static int maiorTempoRede(int[][] utilizacao, int colunaRede, int numPessoas) {
+    public static int maior(int[][] utilizacao, int colunaRede, int numPessoas) {
         int max = utilizacao[0][colunaRede];
         for (int i = 1; i < numPessoas; i++) {
             if (utilizacao[i][colunaRede] > max) {
@@ -120,5 +123,31 @@ public class Main {
         if (contador == 0) {
             System.out.println("none");
         }
+    }
+    // f)
+    public static void rede(String[] nomes, String[] redesSociais, int[][] utilizacao, int  numPessoas, int numRedesSociais) {
+        System.out.println("f) Most used social network");
+
+        for (int j = 0; j < numPessoas; j++) {
+            int maior = maior1(utilizacao, j, numRedesSociais);
+            System.out.printf("%-12s : ", nomes[j]);
+
+            for (int i = 0; i < numRedesSociais; i++) {
+                if (utilizacao[j][i] == maior) {
+                    System.out.printf("[%s] ", redesSociais[i]);
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+    public static int maior1(int[][] utilizacao, int pessoas, int numSociais) {
+        int max = utilizacao[pessoas][0];
+        for (int i = 1; i < numSociais; i++) {
+            if (utilizacao[pessoas][i] > max) {
+                max = utilizacao[pessoas][i];
+            }
+        }
+        return max;
     }
 }
