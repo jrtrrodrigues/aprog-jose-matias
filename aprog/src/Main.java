@@ -34,6 +34,25 @@ public class Main {
             }
         }
     }
+    // b)
+    public static void uso(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
+        System.out.println("b) Social Media Usage (minutes/day)");
+        System.out.printf("%-12s", "");
+
+        for (int j = 0; j < numRedesSociais; j++) {
+            System.out.printf("%12s", redesSociais[j]);
+        }
+        System.out.println();
+
+        for (int i = 0; i < numPessoas; i++) {
+            System.out.printf("%-12s", nomes[i]);
+            for (int j = 0; j < numRedesSociais; j++) {
+                System.out.printf("%12d", utilizacao[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
     // c)
     private static void usoDiario(int[][] utilizacao, String[] nomes, int numPessoas, int numRedesSociais) {
@@ -45,6 +64,33 @@ public class Main {
             double media = (double) soma / numRedesSociais;
             System.out.printf("%-12s : %4d min (%.1f min average/network)%n", nomes[i], soma, media);
         }
+    }
+    // d)
+    public static void atividade(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
+        System.out.println("d) Most active Users");
+
+        for (int j = 0; j < numRedesSociais; j++) {
+            int maior = maiorTempoRede(utilizacao, j, numPessoas);
+            System.out.printf("%-12s : ", redesSociais[j]);
+
+            for (int i = 0; i < numPessoas; i++) {
+                if (utilizacao[i][j] == maior) {
+                    System.out.printf("\"%s\" ", nomes[i]);
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public static int maiorTempoRede(int[][] utilizacao, int colunaRede, int numPessoas) {
+        int max = utilizacao[0][colunaRede];
+        for (int i = 1; i < numPessoas; i++) {
+            if (utilizacao[i][colunaRede] > max) {
+                max = utilizacao[i][colunaRede];
+            }
+        }
+        return max;
     }
 
     // e)
