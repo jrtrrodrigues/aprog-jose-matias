@@ -75,22 +75,21 @@ public class Main {
     }
     // d)
     public static void utilizadoresMaisAtivos(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
-        if (numPessoas <= 0 || numRedesSociais <= 0) {
-            return;
-        }
-        System.out.println("d) Most active Users");
+        if (numPessoas > 0 && numRedesSociais > 0) {
+            System.out.println("d) Most active Users");
 
-        for (int j = 0; j < numRedesSociais; j++) {
-            int maior = MaiorTempoRede(utilizacao, j, numPessoas);
-            System.out.printf("%-12s : ", redesSociais[j]);
-            for (int i = 0; i < numPessoas; i++) {
-                if (utilizacao[i][j] == maior) {
-                    System.out.printf("\"%s\" ", nomes[i]);
+            for (int j = 0; j < numRedesSociais; j++) {
+                int maior = MaiorTempoRede(utilizacao, j, numPessoas);
+                System.out.printf("%-12s : ", redesSociais[j]);
+                for (int i = 0; i < numPessoas; i++) {
+                    if (utilizacao[i][j] == maior) {
+                        System.out.printf("\"%s\" ", nomes[i]);
+                    }
                 }
+                System.out.println();
             }
             System.out.println();
         }
-        System.out.println();
     }
 
     private static int MaiorTempoRede(int[][] utilizacao, int colunaRede, int numPessoas) {
@@ -135,23 +134,22 @@ public class Main {
     }
     // f)
     public static void redesMaisUtilizadas(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
-        if (numPessoas <= 0 || numRedesSociais <= 0) {
-            return;
-        }
-        System.out.println("f) Most used social network");
+        if (numPessoas > 0 && numRedesSociais > 0) {
+            System.out.println("f) Most used social network");
 
-        for (int i = 0; i < numPessoas; i++) {
-            int maior = MaiorTempoPessoa(utilizacao, i, numRedesSociais);
-            System.out.printf("%-12s : ", nomes[i]);
+            for (int i = 0; i < numPessoas; i++) {
+                int maior = MaiorTempoPessoa(utilizacao, i, numRedesSociais);
+                System.out.printf("%-12s : ", nomes[i]);
 
-            for (int j = 0; j < numRedesSociais; j++) {
-                if (utilizacao[i][j] == maior) {
-                    System.out.printf("[%s] ", redesSociais[j]);
+                for (int j = 0; j < numRedesSociais; j++) {
+                    if (utilizacao[i][j] == maior) {
+                        System.out.printf("[%s] ", redesSociais[j]);
+                    }
                 }
+                System.out.println();
             }
             System.out.println();
         }
-        System.out.println();
     }
 
     private static int MaiorTempoPessoa(int[][] utilizacao, int linhaPessoa, int numRedesSociais) {
@@ -215,14 +213,17 @@ public class Main {
     }
 
     private static int obterNivelPerfil(int totalDiario, int limiteModerate, int limiteRegular, int limiteIntensive) {
+        int nivel;
         if (totalDiario < limiteModerate) {
-            return 0;
+            nivel = 0;
         } else if (totalDiario <= limiteRegular) {
-            return 1;
+            nivel = 1;
         } else if (totalDiario <= limiteIntensive) {
-            return 2;
+            nivel = 2;
+        } else {
+            nivel = 3;
         }
-        return 3;
+        return nivel;
     }
     //i
     public static void histrograma(int [][]utilizacao, int numPessoas, int numRedesSociais){
@@ -247,32 +248,31 @@ public class Main {
     }
     // j)
     public static void utilizadoresMaisEquilibrados(String[] nomes, int[][] utilizacao, int numPessoas, int numRedesSociais) {
-        if (numPessoas <= 0 || numRedesSociais <= 0) {
-            return;
-        }
-        System.out.println("j) Most balanced users");
+        if (numPessoas > 0 && numRedesSociais > 0) {
+            System.out.println("j) Most balanced users");
 
-        int[] diferencas = new int[numPessoas];
-        for (int i = 0; i < numPessoas; i++) {
-            int maior = MaiorTempoPessoa(utilizacao, i, numRedesSociais);
-            int menor = MenorTempo(utilizacao, i, numRedesSociais);
-            diferencas[i] = maior - menor;
-        }
-
-        int menorDiferenca = MenorValor(diferencas);
-
-        System.out.print("{");
-        int cont = 0;
-        for (int i = 0; i < numPessoas; i++) {
-            if (diferencas[i] == menorDiferenca) {
-                if (cont > 0) {
-                    System.out.print(", ");
-                }
-                System.out.print("\"" + nomes[i] + "\"");
-                cont++;
+            int[] diferencas = new int[numPessoas];
+            for (int i = 0; i < numPessoas; i++) {
+                int maior = MaiorTempoPessoa(utilizacao, i, numRedesSociais);
+                int menor = MenorTempo(utilizacao, i, numRedesSociais);
+                diferencas[i] = maior - menor;
             }
+
+            int menorDiferenca = MenorValor(diferencas);
+
+            System.out.print("{");
+            int cont = 0;
+            for (int i = 0; i < numPessoas; i++) {
+                if (diferencas[i] == menorDiferenca) {
+                    if (cont > 0) {
+                        System.out.print(", ");
+                    }
+                    System.out.print("\"" + nomes[i] + "\"");
+                    cont++;
+                }
+            }
+            System.out.println("}");
         }
-        System.out.println("}");
     }
 
     private static int MenorTempo(int[][] utilizacao, int linhaPessoa, int numRedesSociais) {
@@ -295,4 +295,3 @@ public class Main {
         return menor;
     }
 }
-
