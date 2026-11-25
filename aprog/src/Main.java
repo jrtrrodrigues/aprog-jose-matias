@@ -75,6 +75,9 @@ public class Main {
     }
     // d)
     public static void utilizadoresMaisAtivos(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
+        if (numPessoas <= 0 || numRedesSociais <= 0) {
+            return;
+        }
         System.out.println("d) Most active Users");
 
         for (int j = 0; j < numRedesSociais; j++) {
@@ -132,6 +135,9 @@ public class Main {
     }
     // f)
     public static void redesMaisUtilizadas(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
+        if (numPessoas <= 0 || numRedesSociais <= 0) {
+            return;
+        }
         System.out.println("f) Most used social network");
 
         for (int i = 0; i < numPessoas; i++) {
@@ -193,7 +199,7 @@ public class Main {
             int nivelPerfil = obterNivelPerfil(totalDiario, Limite_Moderate, Limite_Regular, Limite_Intensive);
 
             for (int k = 0; k < nivelPerfil; k++) {
-                System.out.printf("%-13s", "");
+                System.out.printf("%-12s", "");
             }
             System.out.println(nomes[i]);
         }
@@ -241,6 +247,9 @@ public class Main {
     }
     // j)
     public static void utilizadoresMaisEquilibrados(String[] nomes, int[][] utilizacao, int numPessoas, int numRedesSociais) {
+        if (numPessoas <= 0 || numRedesSociais <= 0) {
+            return;
+        }
         System.out.println("j) Most balanced users");
 
         int[] diferencas = new int[numPessoas];
@@ -286,3 +295,4 @@ public class Main {
         return menor;
     }
 }
+
