@@ -12,12 +12,14 @@ public class Main {
 
         lerMatriz(utilizacao, numPessoas, numRedesSociais);
         uso(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
-        System.out.println("c) Daily usage");
         usoDiario(utilizacao, nomes, numPessoas, numRedesSociais);
         atividade(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
-        System.out.println("e) Users consistently above average");
         acimaMediaTodasRedes(utilizacao, nomes, numPessoas, numRedesSociais);
         rede(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
+        lerPercentagensDeUso(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
+        perfis(nomes, utilizacao, numPessoas, numRedesSociais);
+
+
     }
 
     private static int lerNomes(String[] nomes) {
@@ -58,7 +60,8 @@ public class Main {
     }
 
     // c)
-    private static void usoDiario(int[][] utilizacao, String[] nomes, int numPessoas, int numRedesSociais) {
+    public static void usoDiario(int[][] utilizacao, String[] nomes, int numPessoas, int numRedesSociais) {
+        System.out.println("c) Daily usage");
         for (int i = 0; i < numPessoas; i++) {
             int soma = 0;
             for (int j = 0; j < numRedesSociais; j++) {
@@ -73,7 +76,7 @@ public class Main {
         System.out.println("d) Most active Users");
 
         for (int j = 0; j < numRedesSociais; j++) {
-            int maior = maior(utilizacao, j, numPessoas);
+            int maior = maiorTempoRede(utilizacao, j, numPessoas);
             System.out.printf("%-12s : ", redesSociais[j]);
 
             for (int i = 0; i < numPessoas; i++) {
@@ -86,7 +89,7 @@ public class Main {
         System.out.println();
     }
 
-    public static int maior(int[][] utilizacao, int colunaRede, int numPessoas) {
+    public static int maiorTempoRede(int[][] utilizacao, int colunaRede, int numPessoas) {
         int max = utilizacao[0][colunaRede];
         for (int i = 1; i < numPessoas; i++) {
             if (utilizacao[i][colunaRede] > max) {
@@ -97,7 +100,8 @@ public class Main {
     }
 
     // e)
-    private static void acimaMediaTodasRedes(int[][] utilizacao, String[] nomes, int numPessoas, int numRedesSociais) {
+    public static void acimaMediaTodasRedes(int[][] utilizacao, String[] nomes, int numPessoas, int numRedesSociais) {
+        System.out.println("e) Users consistently above average");
         double[] medias = new double[numRedesSociais];
         int contador = 0;
         for (int j = 0; j < numRedesSociais; j++) {
@@ -140,14 +144,74 @@ public class Main {
             System.out.println();
         }
         System.out.println();
-    }
-    public static int maior1(int[][] utilizacao, int pessoas, int numSociais) {
-        int max = utilizacao[pessoas][0];
-        for (int i = 1; i < numSociais; i++) {
-            if (utilizacao[pessoas][i] > max) {
-                max = utilizacao[pessoas][i];
+
+        //g
+        public static void lerPercentagensDeUso (String[]nomes, String[]redesSociais,int[][] utilizacao, int numPessoas,
+        int numRedesSociais)
+        {
+            System.out.println("g) Percentage of use");
+            System.out.printf("%-12s", "");
+            for (int j = 0; j < numRedesSociais; j++) {
+                System.out.printf("%12s", redesSociais[j]);
+            }
+            System.out.println();
+            for (int i = 0; i < numPessoas; i++) {
+                int soma = 0;
+                for (int j = 0; j < numRedesSociais; j++) {
+                    soma += utilizacao[i][j];
+                }
+                System.out.printf("%-12s", nomes[i]);
+                for (int j = 0; j < numRedesSociais; j++) {
+                    double percentagem = (double) (utilizacao[i][j] * 100) / soma;
+                    System.out.printf("%12.2f%%", percentagem);
+                }
+                System.out.println("");
             }
         }
-        return max;
+    }
+    //h
+    public static void perfis (String[] nomes, int [][]utilizacao, int numPessoas, int numRedesSociais) {
+        System.out.println("h) Users Profile");
+
+        System.out.printf("%-12s%-12s%-12s%s%n", "Moderate", "Regular", "Intensive", "Very Intensive");
+        System.out.println("-----------|-----------|-----------|-----------");
+        for (int j = 0; j < numPessoas; j++) {
+            int soma = 0;
+            for (int i = 0; i < numRedesSociais; i++) {
+                soma += utilizacao[j][i];
+            }
+            if (soma < 90) {
+                System.out.printf("%-12s", nomes[j]);
+            } else if (soma >= 90 && soma <= 180) {
+                System.out.printf("%-12s%-12s", "", nomes[j]);
+            } else if (soma > 180 && soma <= 300) {
+                System.out.printf("%-12s%-12s%-12s", "", "", nomes[j]);
+            } else if (soma > 300) {
+                System.out.printf("%-12s%-12s%-12s%-12s", "", "", "", nomes[j]);
+            }
+            System.out.println("");
+        }
+    }
+    //i
+    public static void histrograma(int [][]utilizacao, int numPessoas, int numRedesSociais){
+        System.out.println("i) Use of social networks");
+        int totalMinutos = 0;
+        int contadorRedesSociais = 0;
+        for (int i = 0; i < numPessoas; i++){
+            for (int j = 0; j < numRedesSociais; j++){
+                totalMinutos += utilizacao[i][j];
+            }
+        }
+        while (contadorRedesSociais < numRedesSociais){
+            int totalMinutosRedeSocial = 0;
+            for (int j = 0; j < numPessoas; j++){
+                for (int i = 0; i < numRedesSociais; j++){
+                    totalMinutosRedeSocial += utilizacao[i][j];
+                }
+            }
+            double percentagem
+
+        }
+
     }
 }
