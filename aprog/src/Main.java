@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 public class Main {
     private static Scanner sc = new Scanner(System.in);
@@ -7,10 +9,19 @@ public class Main {
         String[] redesSociais = new String[100];
         int[][] utilizacao = new int[100][100];
 
-        int numPessoas = lerNomes(nomes);
-        int numRedesSociais = lerNomes(redesSociais);
+        Scanner dados;
+        do {
+            int opcao = input();
+            dados = scanner(opcao, sc);
+        } while (dados == null);
 
-        lerMatriz(utilizacao, numPessoas, numRedesSociais);
+        int numPessoas = lerNomes(nomes, dados);
+        int numRedesSociais = lerNomes(redesSociais, dados);
+
+        lerMatriz(utilizacao, numPessoas, numRedesSociais, dados);
+        if (dados != sc) {
+            dados.close();
+        }
         tabelaUtilizacao(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
         usoDiario(utilizacao, nomes, numPessoas, numRedesSociais);
         utilizadoresMaisAtivos(nomes, redesSociais, utilizacao, numPessoas, numRedesSociais);
@@ -22,9 +33,28 @@ public class Main {
 
 
     }
+    private static int input() {
+        int opcao = 0;
+        do {
+            System.out.println("Escolha a origem dos dados: ");
+            System.out.println("1 -> Ficheiro de Texto\n2 -> Teclado");
+            System.out.print("Opção -> ");
+            if (sc.hasNextInt()) {
+                opcao = sc.nextInt();
+                sc.nextLine();
+                if (opcao != 1 && opcao != 2) {
+                    System.out.println("Opção inválida! Escolha 1 ou 2.\n");
+                }
+            } else {
+                System.out.println("Entrada inválida! Introduza 1 ou 2.\n");
+                sc.nextLine();
+            }
+        } while (opcao != 1 && opcao != 2);
+        return opcao;
+    }
 
-    private static int lerNomes(String[] nomes) {
-        String linha = sc.nextLine();
+    private static int lerNomes(String[] nomes, Scanner dados) {
+        String linha = dados.nextLine();
         String[] nomesLinha = linha.split(",");
 
         for (int i = 0; i < nomesLinha.length; i++) {
@@ -33,15 +63,38 @@ public class Main {
         return nomesLinha.length;
     }
 
-    private static void lerMatriz(int[][] utilizacao, int numPessoas, int numRedesSociais) {
+    private static Scanner scanner(int opcao, Scanner sc) {
+        if (opcao == 1) {
+            try {
+                File file = new File("nome.txt");
+                if (file.exists()) {
+                    System.out.println("\nOrigem dos dados: Ficheiro de Texto");
+                    return new Scanner(file);
+                } else {
+                    System.out.println("Aviso: 'nome.txt' não existe.\n");
+                    return null;
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("Erro ao tentar ler o arquivo.\n");
+                return null;
+            }
+        } else {
+            System.out.println("\nOrigem dos dados: Teclado");
+            System.out.println("Insira os dados:");
+            return sc;
+        }
+    }
+
+    private static void lerMatriz(int[][] utilizacao, int numPessoas, int numRedesSociais, Scanner dados) {
         for (int i = 0; i < numPessoas; i++) {
             for (int j = 0; j < numRedesSociais; j++) {
-                utilizacao[i][j] = sc.nextInt();
+                utilizacao[i][j] = dados.nextInt();
             }
         }
     }
     // b)
     public static void tabelaUtilizacao(String[] nomes, String[] redesSociais, int[][] utilizacao, int numPessoas, int numRedesSociais) {
+        System.out.println();
         System.out.println("b) Social Media Usage (minutes/day)");
         System.out.printf("%-12s", "");
 
@@ -161,6 +214,7 @@ public class Main {
         }
         return max;
     }
+    //g
     public static void lerPercentagensDeUso(String[] nomes, String[] redesSociais,int[][] utilizacao, int numPessoas, int numRedesSociais) {
         System.out.println("g) Percentage of use");
         System.out.printf("%-12s", "");
@@ -181,6 +235,7 @@ public class Main {
             }
             System.out.println("");
         }
+        System.out.println();
     }
     // h)
     public static void perfisUtilizadores(String[] nomes, int[][] utilizacao, int numPessoas, int numRedesSociais) {
@@ -193,8 +248,8 @@ public class Main {
         System.out.println("-----------|-----------|-----------|-----------");
 
         for (int i = 0; i < numPessoas; i++) {
-            int totalDiario = calcularTotalDiarioPessoa(utilizacao, i, numRedesSociais);
-            int nivelPerfil = obterNivelPerfil(totalDiario, Limite_Moderate, Limite_Regular, Limite_Intensive);
+            int totalDiario = totalDiarioPessoa(utilizacao, i, numRedesSociais);
+            int nivelPerfil = nivelPerfil(totalDiario, Limite_Moderate, Limite_Regular, Limite_Intensive);
 
             for (int k = 0; k < nivelPerfil; k++) {
                 System.out.printf("%-12s", "");
@@ -204,7 +259,7 @@ public class Main {
         System.out.println();
     }
 
-    private static int calcularTotalDiarioPessoa(int[][] utilizacao, int linhaPessoa, int numRedesSociais) {
+    private static int totalDiarioPessoa(int[][] utilizacao, int linhaPessoa, int numRedesSociais) {
         int soma = 0;
         for (int j = 0; j < numRedesSociais; j++) {
             soma += utilizacao[linhaPessoa][j];
@@ -212,7 +267,7 @@ public class Main {
         return soma;
     }
 
-    private static int obterNivelPerfil(int totalDiario, int limiteModerate, int limiteRegular, int limiteIntensive) {
+    private static int nivelPerfil(int totalDiario, int limiteModerate, int limiteRegular, int limiteIntensive) {
         int nivel;
         if (totalDiario < limiteModerate) {
             nivel = 0;
